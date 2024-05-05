@@ -8,24 +8,21 @@
 // GPIO del ADC
 #define ANALOG_GPIO 26
 // Canal del ADC
-#define ANALOG_C    0
+#define ANALOG_CH   0
 
 // Tiempo de refresco para el siete segmentos
 #define SLEEP_MS 10
 // Tiempo entre conversiones
 #define ADC_DELAY_MS  500
 
-// Constante de proporcionalidad para el NTC
-#define BETA
-// Resistencia a 25 grados del NTC
-#define RT0
-// Resistencia en serie al NTC
-#define RS
+
 
 // Variable para almacenar el resultado del ADC
 uint16_t adc_value = 0;
 // Variable para guardar el valor de temperatura
 float temperatura = 0.0;
+// Constante de temperatura para el termistor
+const uint16_t beta = 3950;
 
 /*
  * @brief Callback para la interrupcion de timer
