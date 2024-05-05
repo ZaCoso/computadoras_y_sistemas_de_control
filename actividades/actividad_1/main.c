@@ -6,9 +6,9 @@
 #include <math.h>
 
 // GPIO del ADC
-#define ANALOG_GPIO
+#define ANALOG_GPIO 26
 // Canal del ADC
-#define ANALOG_C
+#define ANALOG_C    0
 
 // Tiempo de refresco para el siete segmentos
 #define SLEEP_MS 10
@@ -47,9 +47,10 @@ void display_temp(float temperatura) {
   char str[16];
   // Armo string con temperatura
   sprintf(str, "Temp=%.2f C", temperatura);
-  // Limpio display (si lo hubiese)
-
-  // Muestro (printf o lcd_string)
+  // Limpio display
+  lcd_clear();
+  // Muestro
+  lcd_string(str);
 
 }
 
@@ -64,24 +65,23 @@ int main() {
   // Creo un callback para la interrupcion del timer
   add_repeating_timer_ms(ADC_DELAY_MS, muestreo_periodico, NULL, &timer);
   // Inicializo ADC
-
-	// Inicializo GPIO26 como entrada analogica
-
+  adc_init();
+  // Inicializo GPIO26 como entrada analogica
+  adc_gpio_init(ANALOG_GPIO);
   // Selecciono canal analogico
-
-
-	// Solo si se usa LCD con I2C
-	// Configuro el I2C0 a 100 KHz de clock
-
-	// Elijo GPIO4 como linea de SDA
-
-	// Elijo GPIO5 como linea de SCL
-
-	// Activo pull-up en ambos GPIO, son debiles por lo que
-	// es recomendable usar pull-ups externas
-
-	// Inicializo display (si lo hubiese)
-
+  adc_select_input(ANALOG_CH);
+  // Configuro el I2C0 a 100 KHz de clock
+  i2c_init(i2c0, 100 * 1000);
+  // Elijo GPIO4 como linea de SDA
+  gpio_set_function(4, GPIO_FUNC_I2C);
+  // Elijo GPIO5 como linea de SCL
+  gpio_set_function(5, GPIO_FUNC_I2C);
+  // Activo pull-up en ambos GPIO, son debiles por lo que
+  // es recomendable usar pull-ups externas
+  gpio_pull_up(4);
+  gpio_pull_up(5);
+  // Inicializo display
+  lcd_init();
 
 	// Bucle infinito
   	while (true) {
